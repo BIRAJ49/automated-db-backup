@@ -2,8 +2,8 @@ name: Automated PostgreSQL Backup to S3
 
 on:
   schedule:
-    - cron: "0 */12 * * *" # every 12 hours
-  workflow_dispatch: # manual trigger
+    - cron: "0 */12 * * *"
+  workflow_dispatch:
 
 jobs:
   backup:
@@ -11,18 +11,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Install PostgreSQL client and AWS CLI
+      - name: Ensure PostgreSQL client (AWS CLI is already present)
         run: |
           sudo apt-get update -y
-          sudo apt-get install -y curl unzip gnupg
-
-          # Install AWS CLI v2
-          curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64.zip" -o "awscliv2.zip"
-          unzip awscliv2.zip
-          sudo ./aws/install
-
-          # Install PostgreSQL client
           sudo apt-get install -y postgresql-client
+          aws --version
 
       - name: (Optional) Smoketest S3 permission
         env:
